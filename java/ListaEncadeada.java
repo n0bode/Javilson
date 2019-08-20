@@ -1,7 +1,12 @@
-public class ListaOrdenada{
+public class ListaEncadeada{
   //Exceptions
   public class EmptyListException extends Exception{}
-  public class ElementNotFound extends Exception{}
+
+  public class ElementNotFound extends Exception{
+    public ElementNotFound(String message){
+      super(message);
+    }
+  }
 
   //Class Element
   public class Element{
@@ -33,6 +38,7 @@ public class ListaOrdenada{
       this.data = data;
     }   
   }
+
   private Element head; //Primeiro elemento da lista
   private Element tail; //Ultimo elemento da lista
   
@@ -74,7 +80,7 @@ public class ListaOrdenada{
 
     ptr.setNext(neo);
     
-    //Se o ptr for o tail, ele sera o neo sera o novo tail
+    //Se o ptr for o tail, o neo sera o novo tail
     if(ptr == this.tail){
       this.tail = neo;
     }
@@ -89,7 +95,7 @@ public class ListaOrdenada{
     Element neo = new Element(data, ptr); //O novo elemento
     Element prv = head; //Comeca a vasculhar o antecessor em head
     
-    //Se o ptr, ou seja, o elemento da lista for o head
+    //Se o ptr for o head, o neo sera o novo head
     if (ptr == this.head){
       this.head = neo;
       return;
@@ -110,7 +116,7 @@ public class ListaOrdenada{
 
     //Aqui ele atira um error quando nao existir o elemento com essa data
     if(ptr == null){
-      throw new ElementNotFound();
+      throw new ElementNotFound(""+data);
     }
     return ptr;
   }
@@ -118,8 +124,7 @@ public class ListaOrdenada{
   /*
    * Metodo para apagar um elemento da lista
    */
-
-  public void pop(Object data) throws Exception{
+  public void pop(Object data) throws ElementNotFound{
     Element ptr = this.head; //Para comecar a rodar a lista
     Element prv = null; //O Prev é nulo, pois comeca a vaculhar em head
     
@@ -133,7 +138,7 @@ public class ListaOrdenada{
 
     //Acerta um error
     if (ptr == null){
-      throw new Exception("Falha no engano");
+      throw new ElementNotFound(""+data);
     } 
 
     if (ptr == this.head){
@@ -160,6 +165,22 @@ public class ListaOrdenada{
     return index;
   }
   
+  public void replace(ListaEncadeada list){
+   if(this != list){
+     this.clear();
+     for(Element ptr=list.getHead(); ptr != null; ptr=ptr.getNext()){
+        this.pushFront(ptr.data);
+     }
+   } 
+  }
+
+  /*
+   * Limpa a lista
+   */
+  public void clear(){
+    this.tail = this.head = null;
+  }
+
   public Object getFirst() throws EmptyListException{
     if(this.head == null)
       throw new EmptyListException();
@@ -180,6 +201,10 @@ public class ListaOrdenada{
     return this.tail;
   }
   
+  public boolean isEmpty(){
+    return (this.head == null);
+  }
+
   /*
    * Para quando chamar o Print da lista
    * ele ser mostrada formatada
@@ -195,23 +220,30 @@ public class ListaOrdenada{
   }
 
   public static void main(String[] args){
-    ListaOrdenada list = new ListaOrdenada();
+    ListaEncadeada list0 = new ListaEncadeada();
+    ListaEncadeada list1 = new ListaEncadeada();
 
+    //Aqui gera os elementos da lista
     for(int i = 0; i < 10; i++){
-      if (i % 2 == 0)
-        list.pushBack(i);
-      else
-        list.pushFront(i); 
+      list0.pushFront(9-i);
+      list1.pushFront(i);
     }
-    System.out.println(list);
 
+    System.out.println("Lista 0: " + list0);
+    System.out.println("Lista 1: " + list1);
     try{
-      list.insertFront(5, 6);
-      list.insertFront(9, 10);
-      System.out.println(list);
+      list1.insertFront(5, -1);
+      System.out.println("Adiciona -1 na frente do 5");
+      System.out.println("Lista 1: " + list1);
+      list1.pop(-1);
+      System.out.println("Remove -1");
+      System.out.println("Lista 1: " + list1);
+      System.out.println("Atribute Lista1 a lista0");
+      list0.replace(list1);
+      System.out.println("Lista 0: " + list0);
+    }catch(ElementNotFound e){
+      System.out.println("Acho levemente que nao existe o elemento " + e.getMessage());
     }catch(Exception e){
-      System.out.println("Java é coisa de demente mongoloide");
-      System.out.println("Olha esse sistema de errors");
       System.out.println(e);
     }
   }
