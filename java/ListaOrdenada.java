@@ -66,12 +66,15 @@ public class ListaOrdenada{
   
   /*
    * Insire na frente do elemento selecionado
+   * Ref é o elemento que esta na lista 
    */
   public void insertFront(Object ref, Object data) throws ElementNotFound{
-    Element ptr = this.getElement(ref);
-    Element neo = new Element(data, ptr.getNext());
+    Element ptr = this.getElement(ref); //Pega a posicao de ref na lista ou elemento
+    Element neo = new Element(data, ptr.getNext()); //Cria o novo elemento antes do next do pptr
 
     ptr.setNext(neo);
+    
+    //Se o ptr for o tail, ele sera o neo sera o novo tail
     if(ptr == this.tail){
       this.tail = neo;
     }
@@ -79,18 +82,22 @@ public class ListaOrdenada{
 
   /*
    * Insere atras do elemento selecionado
+   * Ref é a data do elemento
    */
   public void insertBack(Object ref, Object data) throws ElementNotFound{
-    Element ptr = this.getElement(ref);
-    Element neo = new Element(data, ptr);
-    Element prv = head;
-      
+    Element ptr = this.getElement(ref); //Pega o elemento da lista que tenha o ref
+    Element neo = new Element(data, ptr); //O novo elemento
+    Element prv = head; //Comeca a vasculhar o antecessor em head
+    
+    //Se o ptr, ou seja, o elemento da lista for o head
     if (ptr == this.head){
       this.head = neo;
       return;
     }
-
+    
+    //Comeca a vasculhar a lista a procura do antecessor
     for(;prv != null && prv.getNext() != ptr; prv = prv.getNext()){}
+    //Seta o proximo do antecessor como o novo elemento
     prv.setNext(neo);
   }
   
@@ -108,13 +115,22 @@ public class ListaOrdenada{
     return ptr;
   }
 
+  /*
+   * Metodo para apagar um elemento da lista
+   */
+
   public void pop(Object data) throws Exception{
-    Element ptr = this.head;
-    Element prv = null;
-   
+    Element ptr = this.head; //Para comecar a rodar a lista
+    Element prv = null; //O Prev é nulo, pois comeca a vaculhar em head
+    
+    /* Aqui vai procurar o elemento da lista
+     * que tenha mesma data
+     * aproveita e pega tambem o antecessor dele
+     */ 
     for(;ptr != null && ptr.getData() != data; ptr = ptr.getNext()){
-      prv = ptr;
+      prv = ptr; //Seta o antecessor
     }
+
     //Acerta um error
     if (ptr == null){
       throw new Exception("Falha no engano");
@@ -190,7 +206,7 @@ public class ListaOrdenada{
     System.out.println(list);
 
     try{
-      list.insertFront(15, 6);
+      list.insertFront(5, 6);
       list.insertFront(9, 10);
       System.out.println(list);
     }catch(Exception e){
