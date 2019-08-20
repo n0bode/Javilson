@@ -165,7 +165,7 @@ public class ListaEncadeada{
     return index;
   }
   
-  public void replace(ListaEncadeada list){
+  public void assign(ListaEncadeada list){
    if(this != list){
      this.clear();
      for(Element ptr=list.getHead(); ptr != null; ptr=ptr.getNext()){
@@ -239,7 +239,7 @@ public class ListaEncadeada{
       System.out.println("Remove -1");
       System.out.println("Lista 1: " + list1);
       System.out.println("Atribute Lista1 a lista0");
-      list0.replace(list1);
+      list0.assign(list1);
       System.out.println("Lista 0: " + list0);
     }catch(ElementNotFound e){
       System.out.println("Acho levemente que nao existe o elemento " + e.getMessage());
