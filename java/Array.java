@@ -48,4 +48,21 @@ public class Array{
   public void set(int index, Object obj){
     this.data[index-this.base] = obj;
   }
+  
+  public void add(Object obj){
+    this.setLength(this.getLength() + 1);
+    this.data[this.getLength() - 1] = obj;
+  }
+
+  public static void main(String[] args){
+    Array array = new Array(2);
+    array.set(0, "Hello");
+    array.set(1, "World");
+    array.add("Nothing");
+    array.setLength(5); 
+
+    for(int i = 0; i < array.getLength(); i++){
+      System.out.println(array.get(i));
+    }
+  }
 }
