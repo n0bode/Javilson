@@ -27,11 +27,16 @@ public class ListaOrdenada{
     public void setData(Object data){
       this.data = data;
     }
+		
+		@Override
+		public String toString(){
+			return "" + this.data;
+		}
   }
   private Element head;
   private Element tail;
- 
-  public void pushBack(Object data){
+
+  public void pushFront(Object data){
     //Cria um novo elemento com a data, mas sem next
     Element neo = new Element(data);
     //Se for a primeira insercao
@@ -43,7 +48,7 @@ public class ListaOrdenada{
     this.tail = neo;
   }
 
-  public void pushFront(Object data){
+  public void pushBack(Object data){
     //Cria um novo element com a data e o head como proximo
     Element neo = new Element(data, this.head);
     //Se for a primeira insercao
@@ -53,12 +58,43 @@ public class ListaOrdenada{
     this.head = neo;
   }
 
+	public void insertFront(Object ref, Object data){
+		Element ptr = this.get(ref);
+		Element neo = new Element(data, ptr.getNext());
+
+		ptr.setNext(neo);
+
+		if(ptr == this.tail){
+			this.tail = neo;
+		}
+	}
+
+	public void insertBack(Object ref, Object data){
+		Element ptr = this.get(ref);
+		Element neo = new Element(data, ptr);
+		Element prv = head;
+			
+		if (ptr == this.head){
+			this.head = neo;
+			return;
+		}
+
+		for(;prv != null && prv.getNext() != ptr; prv = prv.getNext()){}
+		prv.setNext(neo);
+	}
+
+	public Element get(Object data){
+		Element ptr = head;
+		for(;ptr != null && ptr.getData() != data; ptr = ptr.getNext()){}
+		return ptr;
+	}
+
   public void pop(Object data) throws Exception{
     Element ptr = this.head;
-    Element pre = null;
+    Element prv = null;
    
     for(;ptr != null && ptr.getData() != data; ptr = ptr.getNext()){
-      pre = ptr;
+      prv = ptr;
     }
     //Acerta um error
     if (ptr == null){
@@ -68,13 +104,23 @@ public class ListaOrdenada{
     if (ptr == this.head){
       this.head = ptr.getNext();
     }else if (ptr == this.tail){
-      this.tail = pre;
-      pre.setNext(null);
+      this.tail = prv;
+      prv.setNext(null);
     }else{
-      pre.setNext(ptr.getNext());
+      prv.setNext(ptr.getNext());
     }
-  }
-  
+  }  
+	
+	public int indexOf(Object data){
+		Element ptr = this.head;
+  	int index = 0;
+   
+    for(;ptr != null && ptr.getData() != data; ptr = ptr.getNext()){
+      index++;
+    }
+		return index;
+	}
+
   public Element getHead(){
     return this.head;
   }
@@ -105,14 +151,10 @@ public class ListaOrdenada{
     System.out.println(list);
 
     try{
-      list.pop(0);
-      System.out.println("Poof 0");
-      System.out.println(list);
-      list.pop(5);
-      System.out.println("Poof 5");
-      System.out.println(list);
-      System.out.println("Error test");
-      list.pop(10);
+			list.insertFront(5, 6);
+			list.insertFront(9, 10);
+			System.out.println(list);
+			System.out.println(list.indexOf(4));
     }catch(Exception e){
       System.out.println("Java é coisa de demente mongoloide");
       System.out.println("Olha esse sistema de errors");
