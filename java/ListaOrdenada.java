@@ -1,5 +1,10 @@
 public class ListaOrdenada{
-   public class Element{
+  //Exceptions
+  public class EmptyListException extends Exception{}
+  public class ElementNotFound extends Exception{}
+
+  //Class Element
+  public class Element{
     private Element next;
     private Object data;
 
@@ -26,16 +31,14 @@ public class ListaOrdenada{
 
     public void setData(Object data){
       this.data = data;
-    }
-    
-    @Override
-    public String toString(){
-      return "" + this.data;
-    }
+    }   
   }
-  private Element head;
-  private Element tail;
-
+  private Element head; //Primeiro elemento da lista
+  private Element tail; //Ultimo elemento da lista
+  
+  /*
+   * Adiciona no inicio da lista
+   */
   public void pushFront(Object data){
     //Cria um novo elemento com a data, mas sem next
     Element neo = new Element(data);
@@ -47,7 +50,10 @@ public class ListaOrdenada{
     }
     this.tail = neo;
   }
-
+  
+  /*
+   * Adiciona no final da lista
+   */
   public void pushBack(Object data){
     //Cria um novo element com a data e o head como proximo
     Element neo = new Element(data, this.head);
@@ -57,20 +63,25 @@ public class ListaOrdenada{
     }
     this.head = neo;
   }
-
-  public void insertFront(Object ref, Object data){
-    Element ptr = this.get(ref);
+  
+  /*
+   * Insire na frente do elemento selecionado
+   */
+  public void insertFront(Object ref, Object data) throws ElementNotFound{
+    Element ptr = this.getElement(ref);
     Element neo = new Element(data, ptr.getNext());
 
     ptr.setNext(neo);
-
     if(ptr == this.tail){
       this.tail = neo;
     }
   }
 
-  public void insertBack(Object ref, Object data){
-    Element ptr = this.get(ref);
+  /*
+   * Insere atras do elemento selecionado
+   */
+  public void insertBack(Object ref, Object data) throws ElementNotFound{
+    Element ptr = this.getElement(ref);
     Element neo = new Element(data, ptr);
     Element prv = head;
       
@@ -82,10 +93,18 @@ public class ListaOrdenada{
     for(;prv != null && prv.getNext() != ptr; prv = prv.getNext()){}
     prv.setNext(neo);
   }
-
-  public Element get(Object data){
+  
+  /*
+   * Pega o elemento da lista com a data
+  */
+  private Element getElement(Object data) throws ElementNotFound{
     Element ptr = head;
     for(;ptr != null && ptr.getData() != data; ptr = ptr.getNext()){}
+
+    //Aqui ele atira um error quando nao existir o elemento com essa data
+    if(ptr == null){
+      throw new ElementNotFound();
+    }
     return ptr;
   }
 
@@ -111,6 +130,10 @@ public class ListaOrdenada{
     }
   }  
   
+  /*
+   * Metodo para pegar o index do elemento na lista
+   * Nao serve pra nada, mas e bom ter como exemplo
+   */
   public int indexOf(Object data){
     Element ptr = this.head;
     int index = 0;
@@ -119,6 +142,18 @@ public class ListaOrdenada{
       index++;
     }
     return index;
+  }
+  
+  public Object getFirst() throws EmptyListException{
+    if(this.head == null)
+      throw new EmptyListException();
+    return this.head.getData();
+  }
+  
+  public Object getLast() throws EmptyListException{
+    if(this.tail == null)
+      throw new EmptyListException();
+    return this.tail.getData();
   }
 
   public Element getHead(){
@@ -129,6 +164,10 @@ public class ListaOrdenada{
     return this.tail;
   }
   
+  /*
+   * Para quando chamar o Print da lista
+   * ele ser mostrada formatada
+   */
   @Override
   public String toString(){
     String str = "[ ";
@@ -151,10 +190,9 @@ public class ListaOrdenada{
     System.out.println(list);
 
     try{
-      list.insertFront(5, 6);
+      list.insertFront(15, 6);
       list.insertFront(9, 10);
       System.out.println(list);
-      System.out.println(list.indexOf(4));
     }catch(Exception e){
       System.out.println("Java é coisa de demente mongoloide");
       System.out.println("Olha esse sistema de errors");
