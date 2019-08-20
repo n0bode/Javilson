@@ -43,7 +43,7 @@ public class ListaEncadeada{
   private Element tail; //Ultimo elemento da lista
   
   /*
-   * Adiciona no inicio da lista
+   * Adiciona no final da lista
    */
   public void pushFront(Object data){
     //Cria um novo elemento com a data, mas sem next
@@ -58,7 +58,7 @@ public class ListaEncadeada{
   }
   
   /*
-   * Adiciona no final da lista
+   * Adiciona no inicio da lista
    */
   public void pushBack(Object data){
     //Cria um novo element com a data e o head como proximo
