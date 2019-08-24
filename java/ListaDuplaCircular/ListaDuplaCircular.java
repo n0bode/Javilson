@@ -59,11 +59,11 @@ public class ListaDuplaCircular{
    * Adiciona no final da lista
    */
   public void pushEnd(Object data){
-    //Cria um novo elemento com a data, mas sem next
     Element neo = new Element(data);
     //Se for a primeira insercao
     if (this.tail == null){
       neo.setPrev(neo);
+      neo.setNext(neo);
     }else{
       neo.setPrev(this.tail);
       neo.setNext(this.tail.getNext());
@@ -76,7 +76,6 @@ public class ListaDuplaCircular{
    * Adiciona no inicio da lista
    */
   public void pushBegin(Object data){
-    //Cria um novo element com a data e o head como proximo
     //Se for a primeira insercao
     if (this.tail == null){
       Element neo = new Element(data);
@@ -84,9 +83,10 @@ public class ListaDuplaCircular{
       neo.setPrev(neo);
       this.tail = neo;
     }else{
-      Element neo = new Element(data, this.getTail(), this.getHead());
-      tail.setNext(neo);
-      this.getHead().setPrev(neo);
+      Element head = this.getHead();
+      Element neo = new Element(data, this.tail, this.getHead());
+      this.tail.setNext(neo);
+      head.setPrev(neo);
     }
   }
   
@@ -117,9 +117,15 @@ public class ListaDuplaCircular{
     Element ptr = this.getElement(ref); //Pega o elemento da lista que tenha o ref
     if (ptr == null)
       throw new ElementNotFound(""+data);
-    
-    Element neo = new Element(data, ptr.getPrev(), ptr); //O novo elemento
-    ptr.setPrev(neo);
+   
+    if (ptr.getPrev() == tail)
+     this.tail = tail;
+     
+    System.out.println(ptr);
+    System.out.println(ptr.getPrev());
+    System.out.println(ptr.getNext());
+
+    Element neo = new Element(data, ptr.getPrev(), ptr); //O novo element
     ptr.getPrev().setNext(neo);
     ptr.setPrev(neo);
   }
@@ -132,10 +138,10 @@ public class ListaDuplaCircular{
       throw new EmptyListException();
 
     Element ptr = this.getHead();
-    for(;ptr.getData() != data && ptr != this.getTail(); ptr = ptr.getNext()){}
+    for(;ptr.getData() != data && ptr != this.getTail(); ptr = ptr.getNext()) {
+    }
 
-    //Aqui ele atira um error quando nao existir o elemento com essa data
-    if(ptr == null)
+    if (ptr.getData() != data)
       throw new ElementNotFound(""+data);
     return ptr;
   }
@@ -145,6 +151,7 @@ public class ListaDuplaCircular{
    */
   public void pop(Object data) throws ElementNotFound, EmptyListException{
     Element ptr = this.getElement(data); //Para comecar a rodar a lista
+    
     ptr.getNext().setPrev(ptr.getPrev());
     ptr.getPrev().setNext(ptr.getNext());
   }  
@@ -200,8 +207,7 @@ public class ListaDuplaCircular{
       return "[]";
 
     String str = "[ ";
-    for(Element ptr = this.getHead(); ptr != this.getTail(); ptr = ptr.getNext()){
-
+    for(Element ptr = this.getHead(); ptr != this.getTail(); ptr = ptr.getNext()){ 
       str += ptr.getData() + ", ";
     }
     str += this.getTail().getData() + " ]";

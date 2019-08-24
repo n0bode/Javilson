@@ -12,9 +12,7 @@ public class Main{
     System.out.println("Lista 1: " + list1);
     System.out.println("Lista 0: " + list0);
     try{
-      list1.insertFront(5, -1);
-      System.out.println("Adiciona -1 na frente do 5");
-      list1.insertBack(5, -1);
+      list1.insertBack(5, 90);
       System.out.println("Adiciona -1 atras do 5");
       System.out.println("Lista 1: " + list1);
       list1.pop(-1);
