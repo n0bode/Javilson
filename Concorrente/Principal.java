@@ -1,5 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
+import java.lang.Thread;
 
 public class Principal extends JFrame{
   private Node root;
@@ -12,49 +13,38 @@ public class Principal extends JFrame{
   }
   
   private void build(){
+    System.out.println("Nasce o Pai");
     this.root = new Node();
     root.setDrawer(this);
-    root.addChild();
-    root.addChild();
-    root.addChild();
+    this.root.addEvent(new NodeEvent(){
+       @Override
+       public void run(Node node){
+         try{
+           Thread.sleep(2000);
+           System.out.println("Nasce o primeiro filho");
+           node.addChild();
+           node.getDrawer().repaint();
 
-    root.get(0).addChild();
+           Thread.sleep(3000);
+           System.out.println("Nasce o segundo filho");
+           node.getDrawer().repaint();
 
-    root.get(0).addChild();
-    root.get(0).addChild();
-    root.get(0).addChild(); 
-    root.get(0).addChild();
-
-    root.get(0).get(3).addChild();
-    root.get(0).get(3).addChild();
-    root.get(0).get(3).addChild();
-    root.get(0).get(3).addChild();
-    
-    root.get(1).addChild();
-    root.get(1).addChild();
-
-    root.get(1).get(0).addChild();
-    root.get(1).get(0).addChild();
-    
-    root.get(1).get(1).addChild();
-    root.get(1).get(1).addChild();
-    
-    root.get(2).addChild().addChild();
-    root.get(2).get(0).addChild();
-    root.get(2).get(0).addChild();
-
-    root.get(2).addChild().addChild();
-    root.get(2).get(0).addChild().addChild();
-    root.get(1).addChild();
-
-    root.get(1).get(0).get(0).addChild();
-    root.get(1).get(0).get(0).addChild();
-    root.get(1).get(0).get(0).addChild();
+           node.addChild();
+           Thread.sleep(7000);
+         }catch(Exception e){
+           System.out.println(e.getMessage());
+         }
+       }
+    });
+    this.repaint();
   }
   
+  @Override 
   public void paint(Graphics g){
     super.paint(g);
-    root.draw(g, 20, 50, 40, 25);
+    if (root != null){
+      root.draw(g, 20, 50, 40, 25);
+    }
   }
 
   public static void main(String[] args){

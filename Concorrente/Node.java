@@ -15,6 +15,8 @@ public class Node extends Thread{
   private static int countIndex; //Contador para nodeID
   private Color color; //Cor do node
   
+  private NodeEvent event;
+
   public Node(){
     this(null);
   }
@@ -31,18 +33,11 @@ public class Node extends Thread{
   @Override
   public void run(){
     try{
-      System.out.println("create");
-      Thread.sleep((30 - this.nodeID) * 1000);
-      System.out.println("destred " + this.nodeID);
-      
-      if(this.getParent() != null){
-        if(this.count() > 0){
-        }
-        this.getParent().removeChild(this);
+      if(this.event != null){
+        this.event.run(this);
       }
-      this.drawer.repaint();
     }catch (Exception e){
-
+      System.out.print(e.getMessage());
     }
   }
 
@@ -71,6 +66,11 @@ public class Node extends Thread{
   }
 
   public void clearChild(){
+
+  }
+
+  public void addEvent(NodeEvent event){
+    this.event = event;  
   }
 
   public int count(){
@@ -128,6 +128,10 @@ public class Node extends Thread{
   
   public void setDrawer(Component drawer){
     this.drawer = drawer;
+  }
+
+  public Component getDrawer(){
+    return this.drawer;
   }
 
   public void init(){
