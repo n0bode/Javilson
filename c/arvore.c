@@ -8,7 +8,7 @@
 int main(const int argc, char ** argv){
   char DEBUG = 0;
   
-  for(int i = 0; i < argc; i++){
+  for(int i = 1; i < argc; i++){
     if (strcmp(argv[i], "-d")) 
       DEBUG = 1;
   } 
@@ -48,7 +48,7 @@ int main(const int argc, char ** argv){
     puts("Nasce o segundo filho aos 25 anos");
     if (DEBUG) puts("Timeline: 25s"); //DEBUG
     if (fork() == 0){ //Segundo filho
-      sleep(20); //45
+      sleep(20); // 45
       puts("O pai eh avo (segundo filho) aos 45 anos");
       if (DEBUG) puts("Timeline: 45s"); //DEBUG
       if (fork() == 0){ //Segundo neto
@@ -63,8 +63,8 @@ int main(const int argc, char ** argv){
       exit(0);
     } 
     sleep(7); //32
+    puts("O pai tem o terceiro filho aos 32 anos");
     if (fork() == 0){ //Terceiro filho
-      puts("O pai tem o terceiro filho aos 32 anos");
       if (DEBUG) puts("Timeline: 32s"); //DEBUG
       sleep(55); //87
       puts("O terceiro filho morre aos 55 anos");
